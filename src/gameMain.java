@@ -10,7 +10,7 @@ public class gameMain extends PApplet{
 
     public static void main(String[] args){
         //TODO Launch menu
-        board = gameSettings.newGame(800, 800, 10, 10, 10);
+        board = gameSettings.newGame(1000, 1000, 40, 40, 200);
         PApplet.main("gameMain", args);
     }
 

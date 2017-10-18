@@ -108,7 +108,6 @@ public class block {
 
     public void autoClear(ArrayList<block> clear) {
         while (clear.size() > 0) {
-            System.out.printf("%d\n", clear.size());
             block tile = clear.get(0);
             if(!tile.isCleared()) {
                 tile.setCleared(true);
