@@ -1,58 +1,45 @@
-/*  Minesweeper clone for fun
- *  By Jacob Sheradin
- *  Java 8 with Processing 3.3.6
-*/
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
-import processing.core.PApplet;
+public class gameMain extends Application{
+    public static void main(String[] args) {
+        launch(args);
 
-public class gameMain extends PApplet{
-    static block[] board;
-
-    public static void main(String[] args){
-        //TODO Launch menu
-        board = gameSettings.newGame(1000, 1000, 40, 40, 200);
-        PApplet.main("gameMain", args);
     }
 
-    public void settings() {
-        size(gameSettings.getPixWide(), gameSettings.getPixTall());
-    }
+    @Override
+    public void start(Stage primaryStage) {
+        //TODO start menu
+        gameSettings.newGame(1000, 1000, 40, 40, 200);
+        primaryStage.setTitle("MineClearer2");
 
-    public void setup() {
-        background(255);
-    }
+        //Draw game board
+        Group gameBoard = new Group();
+        Scene menuScene = new Scene(gameBoard, gameSettings.getPixWide(), gameSettings.getPixTall(), Color.BLACK);
 
-    public void mouseClicked(){
-        //Action on tile from click
-        int x = floor(mouseX/gameSettings.getBlockPixWide());
-        int y = floor(mouseY/gameSettings.getBlockPixTall());
-        if(!gameSettings.isGameOver(board)) {
-            if (mouseButton == LEFT) {
-                board[y * gameSettings.getBlocksWide() + x].clickBlock();
-            } else if (mouseButton == RIGHT) {
-                board[y * gameSettings.getBlocksWide() + x].flagBlock();
-            }
+        for(int i=0; i<gameSettings.board.length; i++) {
+            gameBoard.getChildren().add(gameSettings.board[i].getRect(gameBoard));
+            gameBoard.getChildren().add(gameSettings.board[i].getBomb());
         }
-    }
 
-    public void draw() {
-        //Place tiles on the board
         for(int x=0; x<gameSettings.getBlocksWide(); x++){
-            for(int y=0; y<gameSettings.getBlocksTall(); y++){
-                block tile = board[y*gameSettings.getBlocksWide()+x];
-                fill(tile.getColor().getRGB());
-                rect(x*gameSettings.getBlockPixWide(), y*gameSettings.getBlockPixTall(), gameSettings.getBlockPixWide(), gameSettings.getBlockPixTall());
-                if(tile.isCleared() && tile.getBombsAround()!=0){
-                    fill(gameSettings.getColor(6).getRGB());
-                    textAlign(CENTER, CENTER);
-                    textSize(gameSettings.getBlockPixTall()-5);
-                    text(tile.getBombsAround(), x*gameSettings.getBlockPixWide()+gameSettings.getBlockPixWide()/2, y*gameSettings.getBlockPixTall()+gameSettings.getBlockPixTall()/2);
-                }
-                if(gameSettings.isGameOver(board) && tile.isBomb()){
-                    fill(gameSettings.getColor(6).getRGB());
-                    ellipse(x*gameSettings.getBlockPixWide()+gameSettings.getBlockPixWide()/2, y*gameSettings.getBlockPixTall()+gameSettings.getBlockPixTall()/2, gameSettings.getBlockPixWide()/2, gameSettings.getBlockPixTall()/2);
-                }
-            }
+            Line div = new Line(x*gameSettings.getBlockPixWide(), 0, x*gameSettings.getBlockPixWide(), gameSettings.getPixTall());
+            div.setFill(gameSettings.getColor(6));
+            gameBoard.getChildren().add(div);
         }
+
+        for(int y=0; y<gameSettings.getBlocksTall(); y++){
+            Line div = new Line(0, y*gameSettings.getBlockPixTall(), gameSettings.getPixWide(), y*gameSettings.getBlockPixTall());
+            div.setFill(gameSettings.getColor(6));
+            gameBoard.getChildren().add(div);
+        }
+
+        primaryStage.setScene(menuScene);
+        primaryStage.show();
     }
+
 }

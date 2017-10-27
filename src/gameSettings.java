@@ -1,17 +1,29 @@
-import java.awt.*;
+/* This object manages various game variables
+ * and events affecting the whole game board
+ */
+
+import java.util.Arrays;
+
+import javafx.scene.Group;
+import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
 
 public class gameSettings {
+    public static block[] board;
+
     public static int pixWide;
     public static int pixTall;
     public static int blocksWide;
     public static int blocksTall;
     public static int bombs;
 
+    public static boolean spawned;
     public static boolean gameOver;
 
     public static Color[] palette = new Color[7];
+    public static Font font;
 
-    public static block[] newGame(int newpixWide, int newpixTall, int newblocksTall, int newblocksWide, int newbombs) {
+    public static void newGame(int newpixWide, int newpixTall, int newblocksTall, int newblocksWide, int newbombs) {
         //Create a new game
         pixWide = newpixWide;
         pixTall = newpixTall;
@@ -19,6 +31,7 @@ public class gameSettings {
         blocksWide = newblocksWide;
         bombs = newbombs;
 
+        spawned = false;
         gameOver = false;
 
         //Default colors
@@ -33,12 +46,15 @@ public class gameSettings {
             palette[6] = Color.BLACK; //Text
         }
 
+        font = new Font(pixTall/blocksTall);
+
         //Make the grid
         block edge = new block();
         edge.setEdge(true);
         block[] grid = new block[blocksTall*blocksWide];
         for(int i=0; i<grid.length; i++){
             grid[i]=new block();
+            grid[i].setPosition(i);
         }
         for(int x=0; x<blocksWide; x++){
             for(int y=0; y<blocksTall; y++){
@@ -100,20 +116,33 @@ public class gameSettings {
             System.exit(1);
         }
 
-        //Fair(tm) bomb placing algorithm
+        board = grid;
+    }
+
+    public static void populate(int clicked, Group gameBoard){
+        //Fair(ish) bomb placing algorithm
         int bombsPlaced = 0;
         while (bombsPlaced < bombs){
-            int i = (int) (Math.random()*grid.length);
-            if (!grid[i].isBomb()){
-                grid[i].setBomb(true);
+            int i = (int) (Math.random()*board.length);
+            //Auto clear on first click
+            if (!board[i].isBomb() && i!=clicked && !Arrays.asList(board[clicked].getBlocksAround()).contains(board[i])){
+                board[i].setBomb(true);
                 bombsPlaced++;
             }
         }
-        for(int i=0; i<grid.length; i++){
-            grid[i].countBombsAround();
+        for(int i=0; i<board.length; i++){
+            board[i].countBombsAround();
         }
 
-        return grid;
+        spawned = true;
+
+        for(int i=0; i<board.length; i++){
+            gameBoard.getChildren().add(board[i].getNumber());
+        }
+    }
+
+    public static boolean isSpawned() {
+        return spawned;
     }
 
     public static int getBlocksTall() {
@@ -158,7 +187,7 @@ public class gameSettings {
         return palette[state];
     }
 
-    public static boolean isGameOver(block[] board){
+    public static boolean isGameOver(){
         int checked = 0;
         for(int i=0; i<board.length; i++){
             if (board[i].isCleared()){
@@ -173,8 +202,23 @@ public class gameSettings {
         }
     }
 
+    public static void checkGameOver(){
+        if(isGameOver()){
+            for(int i=0; i<board.length; i++){
+                board[i].showBomb();
+            }
+        }
+    }
+
     public static void endGame(){
         gameOver = true;
     }
 
+    public static Font getFont(){
+        return font;
+    }
+
+    public static void setFont(Font font) {
+        gameSettings.font = font;
+    }
 }
