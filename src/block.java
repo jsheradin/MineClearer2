@@ -1,5 +1,5 @@
 /*  Each square on the minefield is a block object
- *  Each block has a JavaFX Rectangle that is shown on the board
+ *  Each block has a JavaFX Rectangle, Text, and Ellipse
  */
 
 import javafx.event.EventHandler;
@@ -9,8 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
-import java.awt.*;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -131,7 +129,7 @@ public class block {
             }
         }
         rect.setFill(this.getColor());
-        if(!isBomb && bombsAround != 0) {
+        if(!isBomb && bombsAround != 0 && !flagged && cleared) {
             num.setVisible(true);
         }
 
@@ -181,9 +179,9 @@ public class block {
 
     public Text getNumber(){
         num.setText(String.valueOf(bombsAround));
-        num.setX(gameSettings.getBlockPixWide()*(position%gameSettings.getBlocksWide())+gameSettings.getBlockPixWide()/2);
+        num.setX(gameSettings.getBlockPixWide()*(position%gameSettings.getBlocksWide()));
         num.setY(position/gameSettings.getBlocksWide()*gameSettings.getBlockPixTall()+gameSettings.getBlockPixTall());
-        num.setTextAlignment(TextAlignment.LEFT);
+        num.setTextAlignment(TextAlignment.RIGHT);
         num.setFont(gameSettings.getFont());
         num.setFill(gameSettings.getColor(6));
         num.setVisible(false);

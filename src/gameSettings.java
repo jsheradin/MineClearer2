@@ -5,6 +5,7 @@
 import java.util.Arrays;
 
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 
@@ -23,6 +24,9 @@ public class gameSettings {
     public static Color[] palette = new Color[7];
     public static Font font;
 
+    public static Group group;
+    public static Button restart;
+
     public static void newGame(int newpixWide, int newpixTall, int newblocksTall, int newblocksWide, int newbombs) {
         //Create a new game
         pixWide = newpixWide;
@@ -39,10 +43,10 @@ public class gameSettings {
             //TODO remove test values
             palette[0] = Color.GRAY; //Safe, unclicked
             palette[1] = Color.GRAY; //Bomb, unclicked
-            palette[2] = Color.PINK; //Safe, flagged
-            palette[3] = Color.PINK; //Bomb, flagged
+            palette[2] = Color.RED; //Safe, flagged
+            palette[3] = Color.RED; //Bomb, flagged
             palette[4] = Color.GREEN; //Safe, cleared
-            palette[5] = Color.RED; //Detonated
+            palette[5] = Color.ORANGE; //Detonated
             palette[6] = Color.BLACK; //Text
         }
 
@@ -207,6 +211,7 @@ public class gameSettings {
             for(int i=0; i<board.length; i++){
                 board[i].showBomb();
             }
+            group.getChildren().add(restart);
         }
     }
 
@@ -220,5 +225,13 @@ public class gameSettings {
 
     public static void setFont(Font font) {
         gameSettings.font = font;
+    }
+
+    public static void setGroup(Group group) {
+        gameSettings.group = group;
+    }
+
+    public static void setRestart(Button restart) {
+        gameSettings.restart = restart;
     }
 }
