@@ -49,7 +49,7 @@ public class gameMain extends Application{
                 int inputSize = Integer.parseInt(sizeBox.getCharacters().toString());
 
                 if(inputWide>0 && inputTall>0 && inputBombs>0 && inputSize>0) {
-                    if (inputBombs < inputTall * inputWide) {
+                    if (inputBombs < (inputTall * inputWide)) {
                         //Make game
                         gameSettings.newGame(inputWide*inputSize, inputTall*inputSize, inputTall, inputWide, inputBombs);
 

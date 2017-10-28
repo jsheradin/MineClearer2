@@ -129,9 +129,16 @@ public class gameSettings {
         while (bombsPlaced < bombs){
             int i = (int) (Math.random()*board.length);
             //Auto clear on first click
-            if (!board[i].isBomb() && i!=clicked && !Arrays.asList(board[clicked].getBlocksAround()).contains(board[i])){
-                board[i].setBomb(true);
-                bombsPlaced++;
+            if(bombs < (blocksTall*blocksWide-9)) {
+                if (!board[i].isBomb() && i != clicked && !Arrays.asList(board[clicked].getBlocksAround()).contains(board[i])) {
+                    board[i].setBomb(true);
+                    bombsPlaced++;
+                }
+            } else {
+                if (!board[i].isBomb() && i != clicked) {
+                    board[i].setBomb(true);
+                    bombsPlaced++;
+                }
             }
         }
         for(int i=0; i<board.length; i++){
