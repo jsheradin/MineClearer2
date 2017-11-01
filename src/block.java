@@ -134,6 +134,13 @@ public class block {
         }
 
         gameSettings.checkGameOver();
+
+        if(gameSettings.isGameOver()){
+            num.setText("W"); //win
+            //todo use game color palette
+            num.setFill(Color.GOLD);
+            rect.setFill(Color.MEDIUMPURPLE);
+        }
     }
 
     public void autoClear(ArrayList<block> clear) {

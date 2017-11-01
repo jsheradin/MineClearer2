@@ -43,43 +43,47 @@ public class gameMain extends Application{
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 //Validate input
-                int inputWide = Integer.parseInt(wideBox.getCharacters().toString());
-                int inputTall = Integer.parseInt(tallBox.getCharacters().toString());
-                int inputBombs = Integer.parseInt(bombBox.getCharacters().toString());
-                int inputSize = Integer.parseInt(sizeBox.getCharacters().toString());
+                try {
+                    int inputWide = Integer.parseInt(wideBox.getCharacters().toString());
+                    int inputTall = Integer.parseInt(tallBox.getCharacters().toString());
+                    int inputBombs = Integer.parseInt(bombBox.getCharacters().toString());
+                    int inputSize = Integer.parseInt(sizeBox.getCharacters().toString());
 
-                if(inputWide>0 && inputTall>0 && inputBombs>0 && inputSize>0) {
-                    if (inputBombs < (inputTall * inputWide)) {
-                        //Make game
-                        gameSettings.newGame(inputWide*inputSize, inputTall*inputSize, inputTall, inputWide, inputBombs);
+                    if (inputWide > 0 && inputTall > 0 && inputBombs > 0 && inputSize > 0) {
+                        if (inputBombs < (inputTall * inputWide)) {
+                            //Make game
+                            gameSettings.newGame(inputWide * inputSize, inputTall * inputSize, inputTall, inputWide, inputBombs);
 
-                        //Draw game board
-                        Group gameBoard = new Group();
-                        Scene gameScene = new Scene(gameBoard, gameSettings.getPixWide(), gameSettings.getPixTall(), Color.BLACK);
+                            //Draw game board
+                            Group gameBoard = new Group();
+                            Scene gameScene = new Scene(gameBoard, gameSettings.getPixWide(), gameSettings.getPixTall(), Color.BLACK);
 
-                        gameSettings.setGroup(gameBoard);
-                        gameSettings.setRestart(restart);
+                            gameSettings.setGroup(gameBoard);
+                            gameSettings.setRestart(restart);
 
-                        for (int i = 0; i < gameSettings.board.length; i++) {
-                            gameBoard.getChildren().add(gameSettings.board[i].getRect(gameBoard));
-                            gameBoard.getChildren().add(gameSettings.board[i].getBomb());
+                            for (int i = 0; i < gameSettings.board.length; i++) {
+                                gameBoard.getChildren().add(gameSettings.board[i].getRect(gameBoard));
+                                gameBoard.getChildren().add(gameSettings.board[i].getBomb());
+                            }
+
+                            for (int x = 0; x < gameSettings.getBlocksWide(); x++) {
+                                Line div = new Line(x * gameSettings.getBlockPixWide(), 0, x * gameSettings.getBlockPixWide(), gameSettings.getPixTall());
+                                div.setFill(gameSettings.getColor(6));
+                                gameBoard.getChildren().add(div);
+                            }
+
+                            for (int y = 0; y < gameSettings.getBlocksTall(); y++) {
+                                Line div = new Line(0, y * gameSettings.getBlockPixTall(), gameSettings.getPixWide(), y * gameSettings.getBlockPixTall());
+                                div.setFill(gameSettings.getColor(6));
+                                gameBoard.getChildren().add(div);
+                            }
+
+                            primaryStage.setScene(gameScene);
+                            primaryStage.show();
                         }
-
-                        for (int x = 0; x < gameSettings.getBlocksWide(); x++) {
-                            Line div = new Line(x * gameSettings.getBlockPixWide(), 0, x * gameSettings.getBlockPixWide(), gameSettings.getPixTall());
-                            div.setFill(gameSettings.getColor(6));
-                            gameBoard.getChildren().add(div);
-                        }
-
-                        for (int y = 0; y < gameSettings.getBlocksTall(); y++) {
-                            Line div = new Line(0, y * gameSettings.getBlockPixTall(), gameSettings.getPixWide(), y * gameSettings.getBlockPixTall());
-                            div.setFill(gameSettings.getColor(6));
-                            gameBoard.getChildren().add(div);
-                        }
-
-                        primaryStage.setScene(gameScene);
-                        primaryStage.show();
                     }
+                } catch (NumberFormatException e){
+                    //System.out.printf("\nBad input: " + e.getMessage());
                 }
             }
         });
